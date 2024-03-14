@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Drop.DropController">
+   <children>
+      <AnchorPane prefHeight="60.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="10.0" layoutY="9.0" prefHeight="44.0" prefWidth="87.0" style="-fx-font-size: 20; -fx-text-fill: red;" text="DROP" >
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <VBox fx:id="dropVbox" prefHeight="147.0" prefWidth="600.0" />
+      <AnchorPane prefHeight="191.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="dropbtn" layoutX="211.0" layoutY="42.0" mnemonicParsing="false" onAction="#cancelbtn" prefHeight="66.0" prefWidth="164.0" text="나가기" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

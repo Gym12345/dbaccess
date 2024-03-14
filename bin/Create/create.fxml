@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="mainVbox" prefHeight="700.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Create.CreateController">
+   <children>
+      <AnchorPane prefHeight="63.0" prefWidth="400.0">
+         <children>
+            <Label layoutX="10.0" layoutY="9.0" prefHeight="44.0" prefWidth="87.0" style="-fx-font-size: 20;" text="CREATE" />
+            <Label layoutX="125.0" layoutY="10.0" prefHeight="44.0" prefWidth="55.0" style="-fx-font-size: 10;" text="TableName:" />
+            
+            <TextField fx:id="tableName" layoutX="180.0" layoutY="21.0" prefHeight="10.0" prefWidth="80.0" promptText="Enter text" />
+            
+            <Button layoutX="294.0" layoutY="11.0" mnemonicParsing="false" onAction="#columnCreate" prefHeight="40.0" prefWidth="80.0" text="컬럼 생성" />
+            <Button layoutX="374.0" layoutY="11.0" mnemonicParsing="false" onAction="#columnDelete" prefHeight="40.0" prefWidth="80.0" text="컬럼 삭제" />
+            
+         </children>
+      </AnchorPane>
+      <VBox fx:id="columnVbox" prefHeight="450.0" prefWidth="400.0" />
+      <AnchorPane prefHeight="70.0" prefWidth="400.0">
+         <children>
+            <Button fx:id="testbtn" layoutX="396.0" layoutY="15.0" mnemonicParsing="false" onAction="#cancelCreate" prefHeight="40.0" prefWidth="44.0" text="취소" />
+            <TextField  fx:id="generatedQuery" layoutX="98.0" layoutY="13.0" prefHeight="44.0" prefWidth="206.0" />
+            <Button layoutX="8.0" layoutY="24.0" mnemonicParsing="false" onAction="#generateQuery" prefHeight="22.0" prefWidth="80.0" text="query 생성 " />
+            <Button layoutX="319.0" layoutY="24.0" mnemonicParsing="false" onAction="#createTable" prefHeight="22.0" prefWidth="64.0" text="DB 반영" />
+         
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
