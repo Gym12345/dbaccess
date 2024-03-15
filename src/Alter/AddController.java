@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
+import Login.connection;
 import Main.MainController;
-import Main.connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,19 +26,17 @@ public class AddController implements Initializable {
 	@FXML public CheckBox DataUnique;
 	String tableName=null;
 	
-	 connection con=new connection();
-	    Connection cons=con.getConnection();
+	 
+	    Connection cons=Login.connection.con;
 	    PreparedStatement ps;
 	    ResultSet rs;
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		DataChoice.getItems().addAll("varchar(50)","varchar2(50)","num","date");
+		DataChoice.getItems().addAll("varchar(50)","varchar2(50)","NUMBER","date");
 	}
 	
-	MainController ctrl;
-	public void getCtrl(MainController ctrl) {
-		this.ctrl=ctrl;
-	}
+	MainController ctrl=MainController.ctrl;
+	AlterController ctrl1=AlterController.ctrl;
 	
 	Parent root;
 	public void getRoot(Parent root) {
@@ -103,6 +101,7 @@ public class AddController implements Initializable {
     	  UniBuilder.append(" ADD CONSTRAINT ").append("Unique_").append(columnName).append(" Unique (");
     	  UniBuilder.append("\"").append(columnName).append("\" ").append(")");
 	    String finalUniqueSql = UniBuilder.toString();
+	    cons=connection.con;
 	  	ps=cons.prepareStatement(finalUniqueSql);
 	    ps.executeUpdate();
 	    System.out.println("Unique생성");
@@ -113,13 +112,13 @@ public class AddController implements Initializable {
 		alert.setContentText("컬럼이 생성되었습니다.");
 		alert.showAndWait();
 		ctrl.clearViewArea();
+		ctrl1.clearViewArea();
 	    }catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	public void CancelAction(){
 		Stage stage = (Stage)root.getScene().getWindow();
-		ctrl.clearViewArea();
 		stage.close();
 	}
 	

@@ -17,11 +17,11 @@
                         <Insets top="30.0" />
                      </opaqueInsets>
                   </Button>
-                  <Button layoutX="200.0" layoutY="25.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="100.0" text="Alter" />
-                  <Button layoutX="350.0" layoutY="25.0" mnemonicParsing="false" onAction="#drop"  style="-fx-text-fill: red;" prefHeight="36.0" prefWidth="100.0" text="Drop" />
-                  <Button layoutX="500.0" layoutY="25.0" mnemonicParsing="false" onAction="#rename" prefHeight="36.0" prefWidth="100.0" text="Rename" />
-                  <Button layoutX="650.0" layoutY="25.0" mnemonicParsing="false" onAction="#truncate" style="-fx-text-fill: red;-fx-border-color: red;"  prefHeight="36.0" prefWidth="100.0" text="Truncate" />
-                  <Button layoutX="800.0" layoutY="25.0" mnemonicParsing="false" onAction="#sequence" style="-fx-text-fill: green;" prefHeight="36.0" prefWidth="100.0" text="Sequence" />
+
+                  <Button layoutX="200.0" layoutY="25.0" mnemonicParsing="false" onAction="#drop"  style="-fx-text-fill: red;" prefHeight="36.0" prefWidth="100.0" text="Drop" />
+                  <Button layoutX="350.0" layoutY="25.0" mnemonicParsing="false" onAction="#rename" prefHeight="36.0" prefWidth="100.0" text="Rename" />
+                  <Button layoutX="500.0" layoutY="25.0" mnemonicParsing="false" onAction="#truncate" style="-fx-text-fill: red;-fx-border-color: red;"  prefHeight="36.0" prefWidth="100.0" text="Truncate" />
+                  <Button layoutX="650.0" layoutY="25.0" mnemonicParsing="false" onAction="#sequence" style="-fx-text-fill: green;" prefHeight="36.0" prefWidth="100.0" text="Sequence" />
                </children>
                <effect>
                   <Blend />

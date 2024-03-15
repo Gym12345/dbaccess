@@ -34,6 +34,7 @@ public class createMain {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("create.fxml"));
 		root = loader.load();
 		CreateController ctrl = loader.getController();
+		
 		ctrl.setCtrl(this.ctrl);
 		ctrl.getView(viewArea);
 		

@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import Login.connection;
 import Main.MainController;
-import Main.connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -132,8 +132,7 @@ public class CreateController{
 		 
 	     
 	       System.out.println("Final SQL Query: " + genQuery);
-	       connection con=new connection();
-	       Connection conn=con.getConnection();
+	       Connection conn=connection.con;
 	       PreparedStatement ps;
 	       ResultSet rs;
 	       
@@ -148,7 +147,7 @@ public class CreateController{
 	       ctrl.createCounter();
 			alert.showAndWait();
 		    viewArea.getChildren().clear();
-		    ctrl.search();
+		    ctrl.search();  //다시 테이블 로드
 	       
 	       }catch (Exception e) {
 	    	 alert.setContentText("query error");
@@ -214,7 +213,7 @@ public class CreateController{
 	     
 	      
 	       
-	     genQuery=finalSql;
+	     genQuery=finalSql.toUpperCase(); // 
 		 System.out.println(genQuery);
 		 generatedQuery.setText(genQuery);
 		 

@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import Login.connection;
 import Main.MainController;
-import Main.connection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,15 +39,14 @@ public class DropController  {
 	public void setRoot(Parent root) {
 		this.root=root;
 	}
-		connection con=new connection();
-		Connection conn =con.getConnection();
+		Connection conn =connection.con;
 		PreparedStatement ps;
 		ResultSet rs;
 		
 	public void search() {
 			
 		ArrayList<String> tableList= new ArrayList();
-
+		conn=connection.con;
 			try {
 					String url ="select * from tab where TNAME NOT LIKE 'BIN$%'";
 					ps= conn.prepareStatement(url);
@@ -91,7 +90,7 @@ public class DropController  {
 						            System.out.println("Commit button clicked. Text: " + text);
 						            try {
 						        		
-						        		
+						            	conn=connection.con;
 						        		ps= conn.prepareStatement(genQuery);
 						        		int a=ps.executeUpdate();
 						        		Alert alerterror = new Alert(AlertType.INFORMATION);
@@ -105,12 +104,10 @@ public class DropController  {
 						        			
 						        			textField.setText("삭제할 테이블 이름입니다."); // Set initial text
 						        			dropVbox.getChildren().clear();
-						        			ctrl.clearViewArea();
-//						        			search();
+						        			ctrl.clearViewArea();   //MainController 의 인스턴스
+						        			search();    //dropController 의 search
 						        			
-//						        			viewArea =ctrl.getViewArea();  //이거 키면 버그 
-//						        			viewArea.getChildren().clear();
-//						        		    ctrl.search();
+
 						        			
 						        		}else {
 						        			
@@ -138,7 +135,7 @@ public class DropController  {
 						        public void handle(ActionEvent event) {
 						        	
 						        	textField.setText("drop table "+buttons.getText());
-						            genQuery="drop table "+buttons.getText();
+						            genQuery="drop table "+"\""+buttons.getText()+"\"";
 						            
 						        
 						        }

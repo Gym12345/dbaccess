@@ -1,4 +1,4 @@
-package Main;
+package Login;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,17 +9,15 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 public class connection {
-    private Connection con;
+    public static Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
 	
 
-    public connection() {
+    public connection(String jdbcUrl, String username, String password) {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            String jdbcUrl = "jdbc:oracle:thin:@localhost:1521:orcl";
-            String username = "C##Gym12345";
-            String password = "991224";
+           
             con = DriverManager.getConnection(jdbcUrl, username, password);
             System.out.println("Database connected");
         } catch (Exception e) {

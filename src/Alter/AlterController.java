@@ -6,12 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import Login.connection;
 import Main.MainController;
-import Main.connection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -24,30 +26,23 @@ public class AlterController {
 	String columnName = null;
     String dataType = null;
     String sql_null=null;
-    connection con=new connection();
-	Connection cons =con.getConnection();
+	Connection cons =Login.connection.con;
 	PreparedStatement ps;
 	ResultSet rs;
+	ListView columnList;
 	public void setRoot(Parent root){
 		this.root=root;
 	}
 	public void getTable(String A) {
 		tableName=A;
 	}
-	MainController ctrl;
-	public void setCtrl(MainController ctrl) {
+	public static AlterController ctrl;
+	public void setCtrl(AlterController ctrl) {
 		   this.ctrl=ctrl;
 	   }
 	
-	AnchorPane viewArea;
-	public void getView(AnchorPane viewArea) {
-		this.viewArea=viewArea;
-	}
-	
+	AnchorPane anchorPane;
 	public void viewTable() {
-		
-		AnchorPane anchorPane;
-		
 		Label tableNameLabel;
 			ArrayList<String> calumn= new ArrayList();
 			System.out.println(tableName);
@@ -78,15 +73,12 @@ public class AlterController {
                 DataBuilder.append(sql_null);
                 String finalSql = DataBuilder.toString();
                 calumn.add(finalSql);
-//                calumn.add(columnName+" "+dataType+""+nullable);
             }
-
-			
 			anchorPane = new AnchorPane();
 	        
 	        ObservableList<String> observableList = FXCollections.observableArrayList(calumn);
 	        
-	        ListView columnList = new ListView<>(observableList);
+	        columnList = new ListView<>(observableList);
 	        tableNameLabel = new Label();
 	        
 	        anchorPane.setLayoutX(180.0);
@@ -116,18 +108,69 @@ public class AlterController {
 				e.printStackTrace();
 			}
 			
+			
 	}
 	
 	public void	ColumnAdd() {
 		AddMain add= new AddMain();
-		add.viewFx(tableName);
 		add.getCtrl(ctrl);
+		add.viewFx(tableName);
+		System.out.println(ctrl);
+		
+		
+	}
+	public void clearViewArea() {
+		System.out.println("AlterclearViewArea()");
+		viewAnchor.getChildren().clear();
+		viewTable();
+	}
+	public String getColumImpo() {
+		if(columnList.getSelectionModel().isEmpty()) {
+			return null;
+		}else {
+			String columnimpo=(String)columnList.getSelectionModel().getSelectedItem();
+			String[] columnCut=columnimpo.split("\\s");
+			String column=columnCut[0];
+			return column;
+		}
 	}
 	public void ColumnDrop() {
-		StringBuilder sqlBuilder = new StringBuilder("ALTER TABLE ");
+		MainController ctrl=MainController.ctrl;
+		AlterController ctrl1=AlterController.ctrl;
+		System.out.println(tableName);
+		System.out.println(columnName);
+		String columnName=getColumImpo();
+		String apper=columnName.toUpperCase();
+		StringBuilder DropBuilder = new StringBuilder("ALTER TABLE ");
+		DropBuilder.append(tableName).append(" DROP COLUMN \"").append(columnName).append("\"");
+//		DropBuilder.append(tableName).append(" ").append("DROP COLUMN ").append(apper);
+		String finalColumnDropSql = DropBuilder.toString();
+		try {
+		cons=connection.con;
+		ps=cons.prepareStatement(finalColumnDropSql);
+	    ps.executeUpdate();
+	    ctrl.clearViewArea();
+		ctrl1.clearViewArea();
+		finalColumnDropSql=null;
+		DropBuilder.setLength(0);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 	public void ColumnModify() {
-		StringBuilder sqlBuilder = new StringBuilder("ALTER TABLE ");
+		String columnName=getColumImpo();
+		if(columnName != null && getColumImpo().length()>0) {
+			//String columnName=getColumImpo();
+			StringBuilder sqlBuilder = new StringBuilder("ALTER TABLE ");
+			ModifyMain mm = new ModifyMain();
+			mm.viewFx(columnName,tableName);
+		}
+		else {
+			Alert alert= new Alert(AlertType.ERROR);
+			alert.setContentText("값을 선택해주세요!");
+			alert.showAndWait();	
+		}
 	}
 }

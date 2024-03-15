@@ -25,11 +25,9 @@ public class AlterMain {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("alter.fxml"));
 		root = loader.load();
 		AlterController ctrl = loader.getController();
-//		ctrl.setCtrl(this.ctrl);
-//		ctrl.getView(viewArea);
 		ctrl.setRoot(root);
 		ctrl.getTable(TableName);
-		ctrl.setCtrl(this.ctrl);
+		ctrl.setCtrl(ctrl);
 		ctrl.viewTable();
 		}catch (Exception e) {
 			e.printStackTrace();

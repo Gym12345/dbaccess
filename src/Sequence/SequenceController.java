@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import Main.connection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -128,8 +127,7 @@ public class SequenceController{
 
 	 public void commitSequence(){
 		 System.out.println("Final SQL Query for DB: " + genQuery);
-	       connection con=new connection();
-	       Connection conn=con.getConnection();
+	       Connection conn=Login.connection.con;
 	       PreparedStatement ps;
 	       ResultSet rs;
 	       

@@ -12,6 +12,7 @@ import Alter.AlterMain;
 import Create.createMain;
 import Drop.dropMain;
 import Insert.insertMain;
+import Login.connection;
 import Rename.renameMain;
 import Sequence.SequenceMain;
 import javafx.animation.Timeline;
@@ -30,27 +31,75 @@ import javafx.scene.layout.AnchorPane;
 
 
 
-public class MainController implements Initializable{
+public class MainController implements Initializable {
 	private Parent root;
-	connection con=new connection();
-	Connection conn =con.getConnection();
+	Connection conn=connection.con ;
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		search();
+	}
+	
+	public Connection getcon() {
+		return conn;
+	}
+	public void setcon(Connection con) {
+		this.conn=con;
+	}
 	PreparedStatement ps;
 	ResultSet rs;
 	@FXML  AnchorPane viewArea;
 	createMain cm;
 	dropMain dm;
 	renameMain rm;
-	MainController ctrl;
+	public static MainController ctrl;
+	
+	
+	private int pageNumTable; //
+	private String tableName;//
+	
+	private int colCountForEach;//
+	
+	int tableColumnCnt=0;//
+	public int getPageNumTable() {//
+		
+		return pageNumTable;
+	}
+	public ArrayList<Integer> getColCount() {//
+		
+		return colCount;
+	}
+	
+	public int init_TableColumnCnt() {//
+		tableColumnCnt=0;
+		return tableColumnCnt;
+	}
+public int getcolCountForEach() {//
+		
+		return colCountForEach;
+	}
+	
+	//HashMap<String,ArrayList> column = new HashMap<>(); //global that contains TableInfos
+	public HashMap<String,ArrayList> getTableInfos(){
+		
+		HashMap<String,ArrayList> tableInfo=new HashMap<String, ArrayList>();
+		tableInfo=column;
+		return tableInfo;
+				
+	}
+	
+	public String getTableName() {
+		
+		return tableName;
+	}
+	
+	
+	
 	public void getMainController(MainController ctrl) {
 		this.ctrl= ctrl;
 	}
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		con =new connection();
-		search();
-		
-	}
+	
+	
 	public void setRoot(Parent root){
 		this.root=root;
 	}
@@ -89,8 +138,11 @@ public class MainController implements Initializable{
 		
 	}
 	
+	
 	public void insert() {
-		insertMain im=new insertMain();
+		insertMain im=new insertMain(); // InsertController 를 쓰면 setMainController 를 두번 안써도 되지만 현재 코드 구조엔 맞지않음
+	    im.setMainController(this); // 현재이 파일의 MainController instance 를참조
+
 		im.viewFx();
 		
 	}
@@ -102,40 +154,76 @@ public class MainController implements Initializable{
     
     
     
+   
+
+//    HashMap<String,ArrayList> column= new HashMap<>(); 
+//    
+//    ArrayList<String> tableList=new ArrayList();
     
+    
+    HashMap<String,ArrayList> column= null; //= new HashMap<>(); //global 전역으로 설정해야 위에 getTableInfos() 함수에서 쓸수잇으니까
+    
+    ArrayList<String> tableList= null; //new ArrayList(); //global, contains table name only //전역으로 설정해야 viewTable 내에서 쓸수잇으니까
+    
+    ArrayList<Integer> colCount=new ArrayList();
     public void search() {
-		ArrayList<String> tableList= new ArrayList();
+    	conn=connection.con;
+    	column = new HashMap<>();
+    	tableList= new ArrayList();   // 이렇게 search안에서 new 해줘야 hashmap 과 arrayList 를 한번 비워줄수있으니까
 		try {
-	String url ="select * from tab where TNAME NOT LIKE 'BIN$%'";
-	ps= conn.prepareStatement(url);
-	rs=ps.executeQuery();
-	while(rs.next()){
+			
+			String url ="select * from tab where TNAME NOT LIKE 'BIN$%'";
+			ps= conn.prepareStatement(url);
+			rs=ps.executeQuery();
+	 
+		while(rs.next()){
 			tableList.add(rs.getString("TNAME"));
-		}
+			}
+		
+		for(int i=0;i<tableList.size();i++) {
+			ArrayList<String> columnList= new ArrayList(); // column list for each table
+			
+			
+			
+			String sql  ="SELECT * FROM COLS WHERE TABLE_NAME ='"+tableList.get(i)+"'";
+					try {
+						ps= conn.prepareStatement(sql);
+						rs=ps.executeQuery();
+						
+						while(rs.next()){
+							columnList.add(rs.getString("COLUMN_NAME"));
+							tableColumnCnt=tableColumnCnt+1;//
+							
+							}
+						
+						
+						column.put(tableList.get(i), columnList);
+						viewTable(tableList.get(i),columnList,i);
+						
+						
+					    System.out.println(i);
+					   
+						}
+		
+					
+		catch (Exception e) {
+			e.printStackTrace();
+			}
+					
+					 colCount.add(tableColumnCnt);//	
+					 tableColumnCnt=0;//
+			}//for 문 end
+	
+	
+	
 	}catch (Exception e) {
 			e.printStackTrace();
 		}
-		HashMap<String,ArrayList> column = new HashMap<>();
 		
-		for(int i=0;i<tableList.size();i++) {
-		ArrayList<String> columnList= new ArrayList();
-		System.out.println(tableList.get(i));
-
-		String sql  ="SELECT * FROM COLS WHERE TABLE_NAME ='"+tableList.get(i)+"'";
-		try {
-		ps= conn.prepareStatement(sql);
-		rs=ps.executeQuery();
-		while(rs.next()){
-			columnList.add(rs.getString("COLUMN_NAME"));
-		}
-		column.put(tableList.get(i), columnList);
-		viewTable(tableList.get(i),columnList,i);
-		System.out.println(tableList.get(i));
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		}
+		
+		
     }
+    
 	public void viewTable(String TableName,ArrayList<String> columnList,int i) {
 		 double currentY = 50;
         anchorPane = new AnchorPane();
@@ -155,7 +243,7 @@ public class MainController implements Initializable{
         anchorPane.setLayoutY(currentY + offsetY);
 
        
-        	System.out.println(ab);System.out.println(i);
+        
         	anchorPane.setLayoutX(10+(210*ab));
             anchorPane.setLayoutY(currentY+(240*(i/5)));
         
@@ -176,23 +264,29 @@ public class MainController implements Initializable{
         tableNameLabel.setStyle("-fx-font-size: 9;");
         tableNameLabel.setText(TableName);
         
-        Alterbtn.setLayoutX(120.0);
+        Alterbtn.setLayoutX(110.0);
         Alterbtn.setLayoutY(8.0);
         Alterbtn.setPrefHeight(36.0);
         Alterbtn.setPrefWidth(40.0);
         Alterbtn.setStyle("-fx-font-size: 9;");
         Alterbtn.setText("Alter");
        
-       
+       //
         Insertbtn.setLayoutX(155.0);
         Insertbtn.setLayoutY(8.0);
         Insertbtn.setPrefHeight(36.0);
         Insertbtn.setPrefWidth(40.0);
         Insertbtn.setStyle("-fx-font-size: 9;");
-        Insertbtn.setText("Insertbtn");
+        Insertbtn.setText("Insert");
         Insertbtn.setOnAction(event -> {
+        	
+        	pageNumTable=i;
+        	tableName=tableList.get(i);
+        	colCountForEach=colCount.get(i);
         	insert();
+        	
         });
+        //
         anchorPane.getChildren().addAll(OlcolumnList, tableNameLabel,Alterbtn,Insertbtn);
         anchorPane.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
         viewArea.getChildren().add(anchorPane);
@@ -217,6 +311,7 @@ public class MainController implements Initializable{
 	public void clearViewArea() {
 		viewArea.getChildren().clear();
 		search();
+		
 	}
 	
 	public int count=0;

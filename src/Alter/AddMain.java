@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 
 public class AddMain {
 	Parent root;
-	MainController ctrl;
-	public void getCtrl(MainController ctrl) {
+	AlterController ctrl;
+	public void getCtrl(AlterController ctrl) {
 		this.ctrl=ctrl;
 	}
 	public void viewFx(String tableName) {
@@ -19,10 +19,7 @@ public class AddMain {
 		root = loader.load();
 		AddController ctrl = loader.getController();
 		ctrl.getRoot(root);
-		ctrl.getCtrl(this.ctrl);
 		ctrl.getTableName(tableName);
-//		ctrl.setCtrl(this.ctrl);
-//		ctrl.getView(viewArea);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

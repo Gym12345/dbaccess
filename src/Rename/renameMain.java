@@ -1,7 +1,6 @@
 package Rename;
 
 
-import Drop.DropController;
 import Main.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,12 +23,15 @@ public class renameMain {
 	
 	public void viewFx() {
 		Stage stage = new Stage();
-		RenameController ctrl = null;
+		
 		try {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("rename.fxml"));
 		root = loader.load();
-		ctrl = loader.getController();
-		//ctrl.setRoot(root);
+		RenameController ctrl = loader.getController();
+		ctrl.setCtrl(this.ctrl);
+		ctrl.getView(viewArea);
+		
+		ctrl.setRoot(root);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
