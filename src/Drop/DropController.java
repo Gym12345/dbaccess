@@ -55,20 +55,18 @@ public class DropController  {
 						tableList.add(rs.getString("TNAME"));
 						}
 				
-	
+				TextField textField = new TextField();
+				textField.setText("삭제할 테이블 이름입니다."); // Set initial text
+				Button buttonCommit = new Button("반영");
+				
 				//List<TextField> textFieldList = new ArrayList<>();
 				for(int i=0;i<tableList.size();i++) 
 				{
 					System.out.println(tableList.get(i));
 					Button buttons = new Button(tableList.get(i));
-					TextField textField = new TextField();
 					
 					
 					
-					
-					textField.setText("삭제할 테이블 이름입니다."); // Set initial text
-					
-					Button buttonCommit = new Button("반영");
 					
 					AnchorPane.setLeftAnchor(buttons, 29.0);
 					AnchorPane.setTopAnchor(buttons, 14.0);
